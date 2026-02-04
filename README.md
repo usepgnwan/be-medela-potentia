@@ -51,3 +51,9 @@ swag init
 - go mod init 
 - copy env.example
 - go run main.go
+
+## Lampiran 
+
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/5f5a22a5-f391-48c5-9db7-6ccb9e9ca5b4" />
+<img width="1919" height="974" alt="image" src="https://github.com/user-attachments/assets/76a9e468-b263-4453-82a5-d46651542047" />
+
