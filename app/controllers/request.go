@@ -113,19 +113,13 @@ func PostRequest(c *fiber.Ctx) error {
 func RejectRequest(c *fiber.Ctx) error {
 	claims := c.Locals("user").(*models.JwtUser)
 	id := c.Params("id")
+
 	var request models.Request
+
 	if err := connection.DB.Model(&models.Request{}).Where("id = ?", id).Order("created_at desc").First(&request).Error; err != nil {
 		return c.Status(http.StatusAccepted).JSON(helpers.Response{
 			Success: false,
 			Error:   err.Error(),
-		})
-	}
-
-	var step models.WorkflowStep
-	if err := connection.DB.Model(&models.WorkflowStep{}).Where("level =?", request.CurrentStep).Where("workflow_id =?", request.WorkflowId).First(&step).Error; err != nil {
-		return c.Status(http.StatusNotFound).JSON(helpers.Response{
-			Success: false,
-			Error:   "Step workflow tidak tersedia pastikan step sudah di setting",
 		})
 	}
 
@@ -144,24 +138,24 @@ func RejectRequest(c *fiber.Ctx) error {
 		})
 	}
 
-	// tolak kalo ga punya authorized
-	if claims.RoleId != step.RoleId {
-		return c.Status(http.StatusUnauthorized).JSON(helpers.Response{
+	if checkRequest.Status == "APPROVED" {
+		return c.Status(http.StatusAccepted).JSON(helpers.Response{
 			Success: false,
-			Error:   fmt.Sprintf("Anda tidak memiliki hak akses"),
+			Error:   fmt.Sprintf("Request sudah selesai / approved"),
 		})
 	}
 
-	// reject by
-	var newRequest models.Request
-	newRequest.Amount = request.Amount
-	newRequest.UserID = claims.ID
-	newRequest.Status = "REJECTED"
-	newRequest.WorkflowId = request.WorkflowId
-	newRequest.UserID = claims.ID
-	newRequest.CurrentStep = request.CurrentStep
-
-	if err := connection.DB.Model(&models.Request{}).Create(&newRequest).Error; err != nil {
+	var step models.WorkflowStep
+	if err := connection.DB.Model(&models.WorkflowStep{}).Where("level =?", checkRequest.CurrentStep).Where("workflow_id =?", checkRequest.WorkflowId).First(&step).Error; err != nil {
+		return c.Status(http.StatusNotFound).JSON(helpers.Response{
+			Success: false,
+			Error:   "Step workflow tidak tersedia pastikan step sudah di setting",
+		})
+	}
+	checkRequest.UserID = claims.ID
+	checkRequest.Status = "REJECT"
+	// update untuk approval seblumnya
+	if err := connection.DB.Save(&checkRequest).Error; err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
 			Success: false,
 			Error:   err.Error(),
@@ -170,7 +164,7 @@ func RejectRequest(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusOK).JSON(helpers.Response{
 		Success: true,
-		Data:    newRequest,
+		Data:    checkRequest,
 	})
 }
 
