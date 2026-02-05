@@ -8,7 +8,9 @@
 - Data Role / Actor
 - Database Postgress
 ## Access API TEST Swagger 
-account
+- Access Live :
+https://be-medela-potentia.usepgnwan.my.id/api/documentation/swagger/index.html
+- account
 ````
 username : tes_bemedelapotentia
 password : password12345
