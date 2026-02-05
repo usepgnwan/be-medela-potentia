@@ -1,4 +1,4 @@
-package middlewares
+package middleware
 
 import (
 	"be-medela-potentia/app/helpers"

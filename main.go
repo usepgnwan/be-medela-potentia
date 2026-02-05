@@ -1,7 +1,7 @@
 package main
 
 import (
-	"be-medela-potentia/app/middlewares"
+	middleware "be-medela-potentia/app/middleware"
 	"be-medela-potentia/app/routes"
 	connection "be-medela-potentia/conection"
 	"fmt"
@@ -27,7 +27,8 @@ func main() {
 	if port == "" {
 		port = "3011"
 	}
-	app.Use(middlewares.Logger())
+	app.Use(middleware.Logger())
+	app.Use(middleware.Cors())
 	routes.InitRoutes(app)
 	app.Listen(fmt.Sprintf(":%s", port))
 }
