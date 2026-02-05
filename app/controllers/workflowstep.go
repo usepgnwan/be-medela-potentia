@@ -66,7 +66,7 @@ func PostWorkflowStep(c *fiber.Ctx) error {
 	}
 
 	if len(validationErr) > 0 {
-		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
+		return c.Status(http.StatusBadRequest).JSON(helpers.Response{
 			Success: false,
 			Error:   "Validation failed",
 			Data:    validationErr,

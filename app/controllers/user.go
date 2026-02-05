@@ -217,7 +217,7 @@ func UserLogin(c *fiber.Ctx) error {
 		user.Name,
 		user.Username,
 		user.RoleId,
-		user.UserRole,
+		*user.UserRole,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72 * 30)), // expired on 30 days
 		},

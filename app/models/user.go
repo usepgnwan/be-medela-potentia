@@ -9,12 +9,12 @@ import (
 )
 
 type User struct {
-	ID       string   `gorm:"primaryKey" json:"id" form:"id" alias:"id" swaggerignore:"true"`
-	Name     *string  `gorm:"size:255" json:"name" validate:"required"`
-	Username *string  `gorm:"size:255" json:"username"`
-	Password string   `gorm:"column:password" json:"password,omitempty" validate:"required"`
-	RoleId   uint     `gorm:"size:255" json:"role_id,omitempty" validate:"required"`
-	UserRole UserRole `json:"user_roles,omitempty" gorm:"foreignKey:RoleId" swaggerignore:"true"`
+	ID       string    `gorm:"primaryKey" json:"id" form:"id" alias:"id" swaggerignore:"true"`
+	Name     *string   `gorm:"size:255" json:"name" validate:"required"`
+	Username *string   `gorm:"size:255" json:"username"`
+	Password string    `gorm:"column:password" json:"password,omitempty" validate:"required"`
+	RoleId   uint      `gorm:"size:255" json:"role_id,omitempty" validate:"required"`
+	UserRole *UserRole `json:"user_roles,omitempty" gorm:"foreignKey:RoleId" swaggerignore:"true"`
 
 	// gorm.Model
 	CreatedAt time.Time      `json:"created_at" swaggerignore:"true"`

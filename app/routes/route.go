@@ -21,4 +21,5 @@ func InitRoutes(r *fiber.App) {
 	RoleRoute(apiprivate)
 	WorkflowRoute(apiprivate)
 	WorkflowStepRoute(apiprivate)
+	RequestRoute(apiprivate)
 }

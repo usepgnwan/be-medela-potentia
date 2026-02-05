@@ -41,7 +41,7 @@ func GetWorkflow(c *fiber.Ctx) error {
 		return db.Preload("Actor")
 	}).Preload("RequestBy", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id", "name", "role_id", "username").Preload("UserRole")
-	})
+	}).Preload("Request")
 	if key_search != "" {
 		key_search = "%" + key_search + "%"
 		query = query.Where("name ILIKE ?", key_search)
@@ -104,7 +104,11 @@ func GetDetailWorkflow(c *fiber.Ctx) error {
 	if err := connection.DB.Model(&models.Workflow{}).Preload("WorkflowStep", func(db *gorm.DB) *gorm.DB {
 		return db.Preload("Actor")
 	}).Preload("RequestBy", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id", "name", "role_id", "username").Preload("UserRole")
+		return db.Select("id", "name", "username").Preload("UserRole")
+	}).Preload("Request", func(db *gorm.DB) *gorm.DB {
+		return db.Preload("ApproveBy", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name", "username").Preload("UserRole")
+		})
 	}).First(&workflow, "id = ?", id).Error; err != nil {
 		return c.Status(http.StatusNotFound).JSON(helpers.Response{
 			Success: false,
@@ -149,7 +153,7 @@ func PostWorkflow(c *fiber.Ctx) error {
 	}
 
 	if len(validationErr) > 0 {
-		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
+		return c.Status(http.StatusBadRequest).JSON(helpers.Response{
 			Success: false,
 			Error:   "Validation failed",
 			Data:    validationErr,

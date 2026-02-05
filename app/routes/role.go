@@ -9,4 +9,5 @@ import (
 func RoleRoute(r fiber.Router) {
 	app := r.Group("roles")
 	app.Get("/", controllers.GetRole)
+	app.Post("/", controllers.PostRole)
 }

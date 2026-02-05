@@ -13,6 +13,7 @@ type Workflow struct {
 	UserID       string          `json:"user_id" gorm:"size:50;not null" swaggerignore:"true"`
 	RequestBy    *User           `json:"request_by" gorm:"foreignKey:UserID;references:ID" swaggerignore:"true"`
 	WorkflowStep *[]WorkflowStep `json:"workflow_step" gorm:"foreignKey:WorkflowId" swaggerignore:"true"`
+	Request      *[]Request      `json:"request" gorm:"foreignKey:WorkflowId" swaggerignore:"true"`
 	CreatedAt    time.Time       `json:"created_at" swaggerignore:"true"`
 	UpdatedAt    time.Time       `json:"updated_at" swaggerignore:"true"`
 	DeletedAt    gorm.DeletedAt  `gorm:"index" json:"deleted_at,omitempty" swaggerignore:"true"`
@@ -28,8 +29,3 @@ func (w *Workflow) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 	return
 }
-
-// type FormWorkflow struct {
-// 	Name   string `json:"name" gorm:"size:255" validate:"required"`
-// 	UserID string `json:"user_id" swaggerignore:"true"`
-// }

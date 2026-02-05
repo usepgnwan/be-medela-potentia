@@ -56,6 +56,7 @@ func AutoMigrateModels() {
 		&models.UserRole{},
 		&models.Workflow{},
 		&models.WorkflowStep{},
+		&models.Request{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to auto migrate models: %v", err)

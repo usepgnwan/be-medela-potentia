@@ -85,3 +85,52 @@ func GetRole(c *fiber.Ctx) error {
 
 	return c.JSON(result)
 }
+
+// @Tags Roles
+// @Summary create roles
+// @Accept json
+// @Produce json
+// @Param user body models.UserRole true "Buat roles"
+// @Success 200 {object} helpers.Response
+// @Failure 400 {object} helpers.Response
+// @Param x-api-key header string true "Unique API Key" default(UspGnwnelpsrSVTsQYu8LVRyGcl5m7kmi)
+// @Router /api/roles [post]
+func PostRole(c *fiber.Ctx) error {
+	var data models.UserRole
+
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
+			Success: false,
+			Error:   err.Error(),
+		})
+	}
+
+	validationErr, err := helpers.ValidateData(&data)
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
+			Success: false,
+			Error:   err.Error(),
+		})
+	}
+
+	if len(validationErr) > 0 {
+		return c.Status(http.StatusBadRequest).JSON(helpers.Response{
+			Success: false,
+			Error:   "Validation failed",
+			Data:    validationErr,
+		})
+	}
+
+	if err := connection.DB.Model(&models.UserRole{}).Create(&data).Error; err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
+			Success: false,
+			Error:   err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(helpers.Response{
+		Success: true,
+		Data:    data,
+	})
+}
