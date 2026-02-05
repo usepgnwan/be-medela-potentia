@@ -10,24 +10,25 @@ import (
 )
 
 // @Tags Workflow Step
-// @Summary Mengambil detail by id workflow step
-// @Param id path string true "id (wajib)"
+// @Summary Mengambil semua step pada workflow
+// @Description - id adalah id workflow
+// @Param id path string true "id workflow (wajib)"
 // @Param x-api-key header string true "Unique API Key" default(UspGnwnelpsrSVTsQYu8LVRyGcl5m7kmi)
 // @Response 200 {object} helpers.Response "Successfully fetched Parameter System"
 // @Response 400 {object} helpers.Response "Bad request"
-// @Router /api/workflows-step/{id} [get]
+// @Router /api/workflows/{id}/step [get]
 func GetDetailWorkflowStep(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	var workflow models.WorkflowStep
-	if err := connection.DB.Model(&models.WorkflowStep{}).Preload("Workflow").Preload("Actor").First(&workflow, "id = ?", id).Error; err != nil {
+	var workflow []models.WorkflowStep
+	if err := connection.DB.Model(&models.WorkflowStep{}).Preload("Workflow").Preload("Actor").Where("workflow_id = ?", id).Find(&workflow).Error; err != nil {
 		return c.Status(http.StatusNotFound).JSON(helpers.Response{
 			Success: false,
 			Error:   err.Error(),
 		})
 	}
 
-	return c.Status(http.StatusNotFound).JSON(helpers.Response{
+	return c.Status(http.StatusOK).JSON(helpers.Response{
 		Success: true,
 		Data:    workflow,
 	})
@@ -35,15 +36,18 @@ func GetDetailWorkflowStep(c *fiber.Ctx) error {
 
 // @Tags Workflow Step
 // @Summary create Workflow
+// @Description Payload :
+// @Description - role_id adalah actor yang bisa approve di step ini
 // @Accept json
 // @Produce json
+// @Param id path string true "id workflow (wajib)"
 // @Param user body models.WorkflowStep true "Buat Workflow"
 // @Success 200 {object} helpers.Response
 // @Failure 400 {object} helpers.Response
 // @Param x-api-key header string true "Unique API Key" default(UspGnwnelpsrSVTsQYu8LVRyGcl5m7kmi)
-// @Param Authorization header string true "Authorization JWT login" default(Bearer eyJhbGciOiJ...)
-// @Router /api/workflows-step [post]
+// @Router /api/workflows/{id}/step [post]
 func PostWorkflowStep(c *fiber.Ctx) error {
+	id := c.Params("id")
 	var data models.WorkflowStep
 	if err := c.BodyParser(&data); err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(helpers.Response{
@@ -51,7 +55,7 @@ func PostWorkflowStep(c *fiber.Ctx) error {
 			Error:   err.Error(),
 		})
 	}
-
+	data.WorkflowId = id
 	validationErr, err := helpers.ValidateData(&data)
 
 	if err != nil {

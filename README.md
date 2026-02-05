@@ -39,8 +39,8 @@ swag init
 - api/workflows : api list workflow
 - api/workflows/id : api detail workflow
 - [post] api/workflows : api creat workflow
-- api/workflows-step/id : api step workflow list
-- [post] api/workflows-step : api creat workflow-step
+- api/workflows/{id}/steps : api list step workflow list
+- [post] api/workflows/{id}/steps : api creat workflow-step
 - api/documentation/swagger/index.html#/ : api swagger
 ## 3. Testing
 - swagger endpoin

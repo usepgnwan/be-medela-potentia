@@ -7,7 +7,7 @@ import (
 )
 
 func WorkflowStepRoute(r fiber.Router) {
-	app := r.Group("workflows-step")
-	app.Get("/:id", controllers.GetDetailWorkflowStep)
-	app.Post("/", controllers.PostWorkflowStep)
+	app := r.Group("workflows")
+	app.Get("/:id/step", controllers.GetDetailWorkflowStep)
+	app.Post("/:id/step", controllers.PostWorkflowStep)
 }

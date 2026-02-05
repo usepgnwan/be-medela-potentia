@@ -10,7 +10,7 @@ import (
 type WorkflowStep struct {
 	ID         string         `json:"id" gorm:"type:uuid;primaryKey" swaggerignore:"true"`
 	Level      int            `json:"level" gorm:"not null" validate:"required"`
-	WorkflowId string         `gorm:"size:255" json:"workflow_id" validate:"required"`
+	WorkflowId string         `gorm:"size:255" json:"workflow_id" validate:"required" swaggerignore:"true"`
 	Workflow   *Workflow      `json:"workflow,omitempty" gorm:"foreignKey:WorkflowId" swaggerignore:"true"`
 	RoleId     uint           `gorm:"size:255" json:"role_id"`
 	Actor      *UserRole      `json:"actor,omitempty" gorm:"foreignKey:RoleId" swaggerignore:"true"`
