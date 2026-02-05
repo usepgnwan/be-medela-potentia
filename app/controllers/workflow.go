@@ -41,7 +41,11 @@ func GetWorkflow(c *fiber.Ctx) error {
 		return db.Preload("Actor")
 	}).Preload("RequestBy", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id", "name", "role_id", "username").Preload("UserRole")
-	}).Preload("Request")
+	}).Preload("Request", func(db *gorm.DB) *gorm.DB {
+		return db.Preload("ApproveBy", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name", "username").Preload("UserRole")
+		})
+	})
 	if key_search != "" {
 		key_search = "%" + key_search + "%"
 		query = query.Where("name ILIKE ?", key_search)

@@ -8,7 +8,9 @@
 - Data Role / Actor
 - Database Postgress
 ## Access API TEST Swagger 
-account
+- Access Live :
+https://be-medela-potentia.usepgnwan.my.id/api/documentation/swagger/index.html
+- account
 ````
 username : tes_bemedelapotentia
 password : password12345
@@ -85,7 +87,7 @@ password : password
 ```
 
 ## Lampiran 
-
+<img width="782" height="626" alt="image" src="https://github.com/user-attachments/assets/e7b8f055-ae59-442d-bf50-fc8b79f949ac" />
 <img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/5f5a22a5-f391-48c5-9db7-6ccb9e9ca5b4" />
 <img width="1919" height="974" alt="image" src="https://github.com/user-attachments/assets/76a9e468-b263-4453-82a5-d46651542047" />
 
