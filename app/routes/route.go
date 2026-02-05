@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"be-medela-potentia/app/middlewares"
+	"be-medela-potentia/app/middleware"
 	_ "be-medela-potentia/docs"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,9 +14,9 @@ func InitRoutes(r *fiber.App) {
 	})
 	api := r.Group("/api")
 	swaggerDoc := api.Group("/documentation")
-	swaggerDoc.Get("/swagger/*", middlewares.SwagMiddleware(), swagger.HandlerDefault)
+	swaggerDoc.Get("/swagger/*", middleware.SwagMiddleware(), swagger.HandlerDefault)
 	// call route
-	apiprivate := api.Use(middlewares.ApiKeyMiddleware())
+	apiprivate := api.Use(middleware.ApiKeyMiddleware())
 	UserRoute(apiprivate)
 	RoleRoute(apiprivate)
 	WorkflowRoute(apiprivate)
